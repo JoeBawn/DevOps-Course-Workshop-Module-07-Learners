@@ -11,7 +11,7 @@ jobs:
       run: dotnet build
 
     - name: Test .NET code
-      run: dotnet Test
+      run: dotnet test
 
     - name: Install NPM
       working-directory: ./DotnetTemplate.Web
