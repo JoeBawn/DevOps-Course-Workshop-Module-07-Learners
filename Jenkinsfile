@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('.NET Build') {
+        stage('.NET Operations') {
             environment {
                 DOTNET_CLI_HOME  = '/tmp/dotnet_cli_home'
             }   
@@ -11,37 +11,44 @@ pipeline {
                     image 'mcr.microsoft.com/dotnet/sdk:5.0'
                 }
             }
-            steps {
-                sh 'dotnet build'
-            }
-        }
+            stages {
+                stage ('.NET Build') {
+                    steps {
+                        sh 'dotnet build'
+                    }
+                }
 
-        stage('.NET Test') {
-            environment {
-                DOTNET_CLI_HOME  = '/tmp/dotnet_cli_home'
-            }   
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/dotnet/sdk:5.0'
+                stage ('.NET Test') {
+                    steps {
+                        sh 'dotnet test'
+                    }
                 }
             }
-            steps {
-                sh 'dotnet test'
-            }
         }
+            
 
-        stage('TypeScript Build') {  
+        stage('npm Operations') {  
             agent {
                 docker {
                     image 'node:14-alpine'
                 }
             }
-            steps {
-                dir('DotnetTemplate.Web') {
-                    sh 'npm run build'
+            stages {
+                stage('npm Install') {  
+                    steps {
+                        dir('DotnetTemplate.Web') {
+                            sh 'npm install'
+                        }
+                    }  
                 }
-                
+                stage('TypeScript Build') {  
+                    steps {
+                        dir('DotnetTemplate.Web') {
+                            sh 'npm run build'
+                        }
+                    }  
+                }
             }
-        }
+        } 
     }
 }
