@@ -28,14 +28,6 @@ jobs:
     - name: Test TypeScript code
       working-directory: ./DotnetTemplate.Web
       run: npm t
-    
-    - uses: actions/checkout@master
-    - name: Teams Notification    
-      with:  
-        webhook_url: https://mclaren.webhook.office.com/webhookb2/d0317a5d-1d29-4024-8555-24c10f780afa@26583ed4-9ffc-46c2-9d1a-f0ca35a30a8d/IncomingWebhook/ad54858e070d473f8487b3cd2ae15d0d/6dea6374-5f7d-41e2-957f-4867dcd6c322
-        needs: ${{ toJson(needs) }}
-        job: ${{ toJson(job) }}
-        steps: ${{ toJson(steps) }}
-        dry_run: True
+  
 
 
