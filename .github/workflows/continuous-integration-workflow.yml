@@ -8,5 +8,27 @@ jobs:
     steps:
     - uses: actions/checkout@v2 # Adds a step to checkout the repository code
 
-    - name: Hello world       # Name of step
-      run: echo 'Hello world' # Command to run
+    - name: Build .NET code
+      run: dotnet build
+
+    - name: Test .NET code
+      run: dotnet Test
+
+    - name: Install NPM
+      working-directory: ./DotnetTemplate.Web
+    - run: npm install
+
+    - name: Build TypeScript code
+      working-directory: ./DotnetTemplate.Web
+    - run: npm run build
+
+    - name: Run TypeScript linting 
+      working-directory: ./DotnetTemplate.Web
+    - run: npm run lint
+
+    - name: Test TypeScript code
+      working-directory: ./DotnetTemplate.Web
+      run: npm t
+
+
+
