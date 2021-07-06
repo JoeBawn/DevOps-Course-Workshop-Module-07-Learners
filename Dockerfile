@@ -5,5 +5,5 @@ COPY . /app
 RUN dotnet build
 WORKDIR /app/DotnetTemplate.Web
 RUN npm install && npm run build
-ENTRYPOINT dotnet run
+ENTRYPOINT [ "dotnet", "run" ]
 
