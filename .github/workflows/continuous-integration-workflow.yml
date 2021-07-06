@@ -1,0 +1,53 @@
+name: Continuous Integration
+on: 
+  push: 
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET 5.0 SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Dotnet build
+      run: dotnet build --configuration Release
+
+    - name: Dotnet test
+      run: dotnet test
+
+    - name: Setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Docker Image Build
+      run: docker build -t joebawn/dotnettemplate .
+      working-directory: .
+
+    - name: Heroku Container Login
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS}} 
+      run: heroku container:login
+      working-directory: .
+    
+    - name: Heroku Container Push
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS }} 
+      run: heroku container:push web --app workshop8-app
+      working-directory: .
+
+    - name: Heroku Container Release
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS }} 
+      run: heroku container:release web --app workshop8-app
+      working-directory: .
