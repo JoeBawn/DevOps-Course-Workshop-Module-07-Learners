@@ -50,5 +50,5 @@ jobs:
       working-directory: .
     
     - name: Docker Image Push
-      run: docker push joebawn/DotnetTemplate:workshop-8-app
+      run: docker push joebawn/dotnettemplate
       working-directory: .
