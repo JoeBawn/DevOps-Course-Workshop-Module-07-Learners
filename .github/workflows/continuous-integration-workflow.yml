@@ -1,33 +1,54 @@
 name: Continuous Integration
-on: [push]                      # Will make the workflow run every time you push to any branch
+on: 
+  push: 
+    branches:
+      - main
 
 jobs:
   build:
     name: Build and test
-    runs-on: ubuntu-latest      # Sets the build environment a machine with the latest Ubuntu installed
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2 # Adds a step to checkout the repository code
-    - name: Build .NET code
-      run: dotnet build
+    - uses: actions/checkout@v2
 
-    - name: Test .NET code
+    - name: Setup .NET 5.0 SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Dotnet build
+      run: dotnet build --configuration Release
+
+    - name: Dotnet test
       run: dotnet test
 
-    - name: Install NPM
-      working-directory: ./DotnetTemplate.Web
-      run: npm install
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
 
-    - name: Build TypeScript code
-      working-directory: ./DotnetTemplate.Web
-      run: npm run build
+    - name: Typescript install
+      run: npm ci
+      working-directory: ./workshop_8.Web
 
-    - name: Run TypeScript linting 
-      working-directory: ./DotnetTemplate.Web
-      run: npm run lint
+    - name: Typescript build
+      run: npm run build 
+      working-directory: ./workshop_8.Web
 
-    - name: Test TypeScript code
-      working-directory: ./DotnetTemplate.Web
-      run: npm t
-  
+    - name: Typescript test
+      run: npm run test
+      working-directory: ./workshop_8.Web
 
+    - name: Docker Image Build
+      run: docker build -t joebawn/workshop_8 .
+      working-directory: .
 
+    - name: Docker Login
+      env: 
+        DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }} 
+      run: echo $DOCKER_HUB_TOKEN | docker login --username joebawn --password-stdin
+      working-directory: .
+    
+    - name: Docker Image Push
+      run: docker push joebawn/workshop_8:workshop-8-app
+      working-directory: .
