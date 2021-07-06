@@ -27,18 +27,6 @@ jobs:
       with:
         node-version: '14'
 
-    """- name: Typescript install
-      run: npm ci
-      working-directory: ./DotnetTemplate.Web
-
-    - name: Typescript build
-      run: npm run build 
-      working-directory: ./DotnetTemplate.Web
-
-    - name: Typescript test
-      run: npm run test
-      working-directory: ./DotnetTemplate.Web"""
-
     - name: Docker Image Build
       run: docker build -t joebawn/DotnetTemplate .
       working-directory: .
