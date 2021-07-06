@@ -29,18 +29,18 @@ jobs:
 
     - name: Typescript install
       run: npm ci
-      working-directory: ./workshop_8.Web
+      working-directory: ./DotnetTemplate.Web
 
     - name: Typescript build
       run: npm run build 
-      working-directory: ./workshop_8.Web
+      working-directory: ./DotnetTemplate.Web
 
     - name: Typescript test
       run: npm run test
-      working-directory: ./workshop_8.Web
+      working-directory: ./DotnetTemplate.Web
 
     - name: Docker Image Build
-      run: docker build -t joebawn/workshop_8 .
+      run: docker build -t joebawn/DotnetTemplate .
       working-directory: .
 
     - name: Docker Login
@@ -50,5 +50,5 @@ jobs:
       working-directory: .
     
     - name: Docker Image Push
-      run: docker push joebawn/workshop_8:workshop-8-app
+      run: docker push joebawn/DotnetTemplate:workshop-8-app
       working-directory: .
