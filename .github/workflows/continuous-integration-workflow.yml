@@ -31,12 +31,23 @@ jobs:
       run: docker build -t joebawn/dotnettemplate .
       working-directory: .
 
-    - name: Docker Login
+    - name: Heroku Container Login
       env: 
-        DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }} 
-      run: echo $DOCKER_HUB_TOKEN | docker login --username joebawn --password-stdin
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS}} 
+      run: heroku container:login
       working-directory: .
     
-    - name: Docker Image Push
-      run: docker push joebawn/dotnettemplate
+    - name: Heroku Container Push
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS }} 
+      run: heroku container:push web --app workshop8-app
+      working-directory: .
+
+    - name: Heroku Container Release
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+        HEROKU_EMAIL_ADDRESS: ${{ secrets.HEROKU_EMAIL_ADDRESS }} 
+      run: heroku container:release web --app workshop8-app
       working-directory: .
