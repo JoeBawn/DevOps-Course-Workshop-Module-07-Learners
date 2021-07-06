@@ -1,2 +1,3 @@
 Dockerfile
 DotnetTemplate.Web/node_modules
+DotnetTemplate.Web/package-lock.json
