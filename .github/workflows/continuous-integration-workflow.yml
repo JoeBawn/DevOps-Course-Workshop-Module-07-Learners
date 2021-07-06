@@ -28,7 +28,7 @@ jobs:
         node-version: '14'
 
     - name: Docker Image Build
-      run: docker build -t joebawn/DotnetTemplate .
+      run: docker build -t joebawn/dotnettemplate .
       working-directory: .
 
     - name: Docker Login
